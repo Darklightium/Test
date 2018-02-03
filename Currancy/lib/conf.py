@@ -43,6 +43,5 @@ def update_info():
         json.dump(currency_info, curses_update)
 
 
-login = "root"
-passwd = "root"
+
 

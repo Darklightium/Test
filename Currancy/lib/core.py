@@ -1,39 +1,41 @@
-from lib import conf
+from lib import conf, sql
 
 
 def menu():
     print("Current courses are:\n"
-          "USD:", conf.usd_buy, "/", conf.usd_sell,
+          "USD:", sql.usd_buy, "/", sql.usd_sell,
           "    Press 1 to sell USD | Press 2 to buy USD\n"
-          "EUR:", conf.eur_buy, "/", conf.eur_sell,
+          "EUR:", sql.eur_buy, "/", sql.eur_sell,
           "       Press 3 to sell EUR | Press 4 to buy EUR\n"
-          "RUB:", conf.rub_buy, "/", conf.rub_sell,
+          "RUB:", sql.rub_buy, "/", sql.rub_sell,
           "   Enter 5 to sell RUB | Enter 6 to buy RUB\n"
-          "Reserve:", round(conf.usd_reserve, 2), "USD |", round(conf.eur_reserve, 2),
-          "EUR |", round(conf.uan_reserve, 2), "UAH |", round(conf.rub_reserve, 2), "RUB\n")
+          "Reserve:", round(sql.usd_reserve, 2), "USD |", round(sql.eur_reserve, 2),
+          "EUR |", round(sql.uan_reserve, 2), "UAH |", round(sql.rub_reserve, 2), "RUB\n")
 
 
 # USD operations
 def sell_usd(ammount):
-    total_sell = float(ammount)*float(conf.usd_buy)
-    if total_sell <= conf.uan_reserve:
-        conf.uan_reserve -= total_sell
-        conf.usd_reserve += ammount
+    total_sell = float(ammount)*float(sql.usd_buy)
+    if total_sell <= sql.uan_reserve:
+        sql.uan_reserve -= total_sell
+        sql.usd_reserve += ammount
         print("Total ammount:", round(total_sell, 2))
-        conf.update_info()
+# conf.update_info()
+        sql.insert_to_db(sql.usd_reserve, sql.uan_reserve, sql.eur_reserve, sql.rub_reserve)
     else:
-        print("Reserve UAN = ", conf.uan_reserve)
+        print("Reserve UAN = ", sql.uan_reserve)
 
 
 def buy_usd(ammount):
-    total_sell = float(ammount)/float(conf.usd_sell)
-    if total_sell <= conf.usd_reserve:
-        conf.usd_reserve -= total_sell
-        conf.uan_reserve += ammount
+    total_sell = float(ammount)/float(sql.usd_sell)
+    if total_sell <= sql.usd_reserve:
+        sql.usd_reserve -= total_sell
+        sql.uan_reserve += ammount
         print("Total ammount:", round(total_sell, 2))
-        conf.update_info()
+        # conf.update_info()
+        sql.insert_to_db(sql.usd_reserve, sql.uan_reserve, sql.eur_reserve, sql.rub_reserve)
     else:
-        print("Reserve USD = ", conf.usd_reserve)
+        print("Reserve USD = ", sql.usd_reserve)
 
 
 # EUR operations
@@ -85,8 +87,8 @@ def buy_rub(ammount):
 def admin_login():
     login_adm = input("Enter your login: ")
     passwd_adm = input("Enter password: ")
-    if login_adm == conf.login:
-        if passwd_adm == conf.passwd:
+    sec.authorise(login_adm,passwd_adm)
+    if True:
             admin_func()
 
     else:
